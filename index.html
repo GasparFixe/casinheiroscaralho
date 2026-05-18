@@ -559,6 +559,9 @@ function App() {
               {page === 'about' && (
                 <About plays={plays} guestbook={guestbook} rsvps={rsvps} rsvpTotals={rsvpTotals} />
               )}
+              {page === 'video' && (
+                <VideoPage />
+              )}
             </main>
           </div>
         </div>
@@ -576,7 +579,7 @@ function App() {
 
 // ── Title Bar ─────────────────────────────────────────
 function TitleBar({ page, track, playing }) {
-  const labels = { listen:'listen', sessions:'sessions', guestbook:'guestbook', about:'about' };
+  const labels = { listen:'listen', sessions:'sessions', guestbook:'guestbook', about:'about', video:'video' };
   return (
     <div className="title-bar">
       <div className="tb-lights"><span className="r"/><span className="y"/><span className="g"/></div>
@@ -594,6 +597,7 @@ function Sidebar({ page, setPage, playing, track }) {
   const items = [
     { id:'listen',    label:'Listen',    icon:'♪' },
     { id:'sessions',  label:'Sessions',  icon:'✶' },
+    { id:'video',     label:'Video',     icon:'▶' },
     { id:'guestbook', label:'Guestbook', icon:'✎' },
     { id:'about',     label:'About',     icon:'i' },
   ];
@@ -980,6 +984,59 @@ function FirstRun({ onDismiss, onListen }) {
             <button className="gel-btn ghost" onClick={onDismiss}>just look around</button>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Video Page ────────────────────────────────────────
+function VideoPage() {
+  const [playing, setPlaying] = React.useState(false);
+  const videoRef = React.useRef(null);
+
+  function togglePlay() {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) { videoRef.current.play(); setPlaying(true); }
+    else { videoRef.current.pause(); setPlaying(false); }
+  }
+
+  return (
+    <div>
+      <div className="eyebrow">▸ video · from the casinha</div>
+      <h1 className="page-title">Video.</h1>
+      <div className="page-sub">
+        Live from the anexo — one take, no edits. This is what it sounds like in the room.
+      </div>
+      <div style={{
+        position:'relative', borderRadius:12, overflow:'hidden',
+        border:'1px solid rgba(125,215,240,0.18)',
+        background:'rgba(6,20,29,0.8)',
+        boxShadow:'0 20px 60px rgba(0,0,0,0.6)',
+        maxWidth:760,
+      }}>
+        <video
+          ref={videoRef}
+          src="/casinheiros.mp4"
+          style={{width:'100%',display:'block',borderRadius:12}}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onEnded={() => setPlaying(false)}
+          controls
+        />
+        <div style={{
+          position:'absolute', top:12, left:12,
+          background:'rgba(0,0,0,0.7)', padding:'3px 10px',
+          fontFamily:'var(--pix)', fontSize:12, color:'var(--acid)',
+          display:'flex', alignItems:'center', gap:6,
+          borderRadius:4,
+        }}>
+          <span style={{width:6,height:6,borderRadius:'50%',background:playing?'var(--acid)':'rgba(255,255,255,0.3)',boxShadow:playing?'0 0 6px var(--acid)':'none',display:'inline-block'}}/>
+          {playing ? 'LIVE' : 'PAUSED'}
+        </div>
+      </div>
+      <div style={{marginTop:16,display:'flex',gap:16,alignItems:'center'}}>
+        <span className="kicker">anexo · ovar</span>
+        <span className="muted" style={{fontStyle:'italic'}}>recorded on the phone, straight from the room.</span>
       </div>
     </div>
   );
