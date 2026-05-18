@@ -19,11 +19,7 @@ function writeJSON(name, data) {
 
 app.use(cors())
 app.use(express.json())
-
-const distPath = path.join(__dirname, 'dist')
-if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath))
-}
+app.use(express.static(__dirname))
 
 app.get('/api/guestbook', (req, res) => res.json(readJSON('guestbook', { entries: [] })))
 app.post('/api/guestbook', (req, res) => {
@@ -46,8 +42,6 @@ app.delete('/api/rsvps/:id', (req, res) => {
   writeJSON('rsvps', data); res.json(data)
 })
 
-if (fs.existsSync(distPath)) {
-  app.get('*', (req, res) => res.sendFile(path.join(distPath, 'index.html')))
-}
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')))
 
-app.listen(PORT, () => console.log(`✶ Casinheiros on port ${PORT} | dist: ${fs.existsSync(distPath)}`))
+app.listen(PORT, () => console.log(`✶ Casinheiros on port ${PORT}`))
