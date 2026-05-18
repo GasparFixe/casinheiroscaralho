@@ -1,19 +1,991 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Casinheiros — acid jazz from Ovar</title>
-    <meta name="description" content="Casinheiros — four people jamming acid jazz and funky grooves in an annex (casinha) in Ovar, Portugal." />
-    <meta property="og:title" content="Casinheiros" />
-    <meta property="og:description" content="Acid jazz from Ovar, Portugal. Live from the anexo." />
-    <meta property="og:type" content="website" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=VT323&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Casinheiros — acid jazz from Ovar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=VT323&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --midnight: #061a26;
+  --lagoa: #0d2e3f;
+  --deep: #082633;
+  --bondi: #1f7da8;
+  --aqua: #7dd7f0;
+  --chrome-lite: #e8f3f7;
+  --chrome-mid: #a3bcc8;
+  --chrome-dark: #4a5e6a;
+  --acid: #a5ff5a;
+  --hibisco: #c41ea5;
+  --bone: #f1ecdf;
+  --ink: #06141d;
+  --text: #e6f3fa;
+  --text-dim: rgba(230,243,250,0.6);
+  --aqua-pill: linear-gradient(180deg, #9fe3ff 0%, #3aa8d8 48%, #1d6a96 50%, #65c0e6 100%);
+  --aqua-pill-press: linear-gradient(180deg, #65c0e6 0%, #1d6a96 48%, #3aa8d8 50%, #9fe3ff 100%);
+  --chrome-bar: linear-gradient(180deg, #f5fafc 0%, #c5d8e0 50%, #8fb0bf 100%);
+  --graphite: linear-gradient(180deg, #e8eef2 0%, #a8b2bc 48%, #5b6670 50%, #9aa4ae 100%);
+  --pix: 'VT323', 'Pixelify Sans', ui-monospace, monospace;
+  --pix-bold: 'Pixelify Sans', 'VT323', monospace;
+  --sans: 'Space Grotesk', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--midnight); color: var(--text); font-family: var(--sans); font-size: 14px; overflow: hidden; height: 100vh; }
+button { font-family: inherit; cursor: pointer; }
+.desktop {
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at 75% 10%, rgba(120,210,255,0.18) 0%, rgba(120,210,255,0) 50%), radial-gradient(ellipse at 15% 90%, rgba(196,30,165,0.12) 0%, rgba(196,30,165,0) 55%), radial-gradient(ellipse at 20% 0%, #1d5066 0%, #0d2935 55%, #06141d 100%);
+  overflow: hidden;
+}
+.desktop::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 3px); z-index: 1; }
+.desktop::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.45) 100%); z-index: 1; }
+.desk-icons { position: absolute; top: 24px; left: 18px; z-index: 2; display: flex; flex-direction: column; gap: 16px; }
+.desk-icon { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 64px; text-align: center; color: var(--text); font-family: var(--pix); font-size: 14px; text-shadow: 1px 1px 0 #000; cursor: default; user-select: none; }
+.desk-icon .glyph { width: 40px; height: 40px; background: var(--aqua-pill); border-radius: 8px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -3px 6px rgba(0,40,70,0.4), 0 2px 8px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; font-size: 22px; color: #0a2a38; font-family: var(--pix-bold); }
+.window { position: absolute; top: 36px; left: 110px; right: 32px; bottom: 56px; z-index: 3; border-radius: 14px; padding: 5px; background: linear-gradient(180deg, #b9d3de 0%, #6f93a3 50%, #4a6878 100%); box-shadow: 0 30px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.7), 0 0 0 1px rgba(255,255,255,0.15); display: flex; flex-direction: column; overflow: hidden; }
+.title-bar { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--chrome-bar); border-radius: 9px 9px 0 0; border-bottom: 1px solid rgba(0,0,0,0.18); flex: 0 0 auto; }
+.tb-lights { display: flex; gap: 7px; }
+.tb-lights span { width: 13px; height: 13px; border-radius: 50%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -1px 1px rgba(0,0,0,0.2); }
+.tb-lights .r { background: radial-gradient(circle at 30% 30%, #ff8a82 0%, #ff5f57 60%, #c93e35 100%); }
+.tb-lights .y { background: radial-gradient(circle at 30% 30%, #ffd86b 0%, #febc2e 60%, #c08a18 100%); }
+.tb-lights .g { background: radial-gradient(circle at 30% 30%, #82e88f 0%, #28c840 60%, #1a8a2a 100%); }
+.tb-title { flex: 1; text-align: center; font-family: var(--pix-bold); font-size: 16px; letter-spacing: 0.04em; color: #1a2e38; text-shadow: 0 1px 0 rgba(255,255,255,0.6); }
+.tb-meta { font-family: var(--pix); font-size: 14px; color: #1a2e38; display: flex; gap: 10px; align-items: center; }
+.tb-meta .dot { width: 6px; height: 6px; border-radius: 50%; background: #28c840; box-shadow: 0 0 6px #28c840; }
+.win-body { display: grid; grid-template-columns: 200px 1fr; flex: 1 1 auto; min-height: 0; background: linear-gradient(180deg, #082c3e 0%, #061a26 100%); }
+.sidebar { background: linear-gradient(180deg, rgba(13,46,63,0.85) 0%, rgba(8,38,51,0.6) 100%); border-right: 1px solid rgba(255,255,255,0.08); padding: 14px 12px; display: flex; flex-direction: column; gap: 4px; overflow: auto; }
+.sidebar h4 { margin: 8px 6px 6px; font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim); font-weight: 500; }
+.nav-btn { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: none; background: transparent; color: var(--text); text-align: left; font-family: var(--sans); font-size: 13px; border-radius: 999px; letter-spacing: 0.02em; transition: background 0.12s, color 0.12s; }
+.nav-btn:hover { background: rgba(255,255,255,0.05); }
+.nav-btn.active { background: var(--aqua-pill); color: #0a2a38; font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -3px 6px rgba(0,40,70,0.35), 0 4px 12px rgba(0,0,0,0.3); }
+.nav-btn .pix-icon { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; font-family: var(--pix-bold); font-size: 14px; background: rgba(255,255,255,0.08); border-radius: 4px; color: var(--aqua); }
+.nav-btn.active .pix-icon { background: rgba(10,42,56,0.3); color: #0a2a38; }
+.sidebar-foot { margin-top: auto; padding: 10px 8px 4px; border-top: 1px solid rgba(255,255,255,0.06); font-family: var(--mono); font-size: 10px; color: var(--text-dim); line-height: 1.6; }
+.content { overflow: auto; padding: 28px 36px 32px; position: relative; }
+.content::-webkit-scrollbar { width: 10px; }
+.content::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+.content::-webkit-scrollbar-thumb { background: var(--aqua-pill); border-radius: 6px; border: 1px solid rgba(0,0,0,0.3); }
+.eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--aqua); opacity: 0.8; margin-bottom: 10px; }
+.page-title { font-family: var(--pix-bold); font-size: 56px; line-height: 0.95; margin: 0 0 10px; color: #fff; letter-spacing: -0.01em; text-shadow: 2px 2px 0 var(--bondi), 0 0 22px rgba(125,215,240,0.35); }
+.page-sub { font-family: var(--sans); font-size: 15px; color: var(--text-dim); max-width: 540px; line-height: 1.5; margin-bottom: 24px; }
+.now-playing { display: grid; grid-template-columns: 220px 1fr; gap: 20px; padding: 16px; background: linear-gradient(180deg, rgba(125,215,240,0.05) 0%, rgba(125,215,240,0.0) 100%), rgba(6,20,29,0.55); border: 1px solid rgba(125,215,240,0.18); border-radius: 12px; margin-bottom: 22px; position: relative; overflow: hidden; }
+.now-playing::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 3px); }
+.np-art { width: 220px; height: 220px; border-radius: 8px; overflow: hidden; background: linear-gradient(135deg, var(--lagoa), var(--midnight)); box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); position: relative; }
+.np-art-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+.np-art .pix-glyph { font-family: var(--pix-bold); font-size: 48px; color: var(--aqua); text-shadow: 2px 2px 0 var(--hibisco), 0 0 18px rgba(125,215,240,0.6); }
+.np-art .pix-label { font-family: var(--pix); font-size: 13px; color: rgba(255,255,255,0.7); letter-spacing: 0.1em; text-align: center; padding: 0 12px; }
+.np-art .scan { position: absolute; inset: 0; pointer-events: none; background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 2px); }
+.np-art .rec { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.7); padding: 2px 8px; font-family: var(--pix); font-size: 12px; color: var(--acid); text-shadow: 0 0 4px var(--acid); display: flex; align-items: center; gap: 6px; }
+.np-art .rec .blob { width: 6px; height: 6px; border-radius: 50%; background: var(--acid); }
+.np-info { display: flex; flex-direction: column; min-width: 0; }
+.np-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--aqua); opacity: 0.7; margin-bottom: 8px; }
+.np-title { font-family: var(--pix-bold); font-size: 42px; line-height: 1; margin: 0 0 6px; color: #fff; text-shadow: 1px 1px 0 var(--bondi); }
+.np-subtitle { font-family: var(--sans); font-style: italic; font-size: 14px; color: var(--text-dim); margin-bottom: 18px; }
+.np-scrub { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; margin-top: auto; }
+.np-bar { height: 14px; background: linear-gradient(180deg, #061a26 0%, #0d2e3f 100%); border-radius: 999px; border: 1px solid rgba(0,0,0,0.4); box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.08); position: relative; overflow: hidden; cursor: pointer; }
+.np-bar-fill { position: absolute; top: 0; bottom: 0; left: 0; background: var(--aqua-pill); box-shadow: inset 0 1px 0 rgba(255,255,255,0.6); border-radius: 999px; transition: width 0.18s linear; }
+.np-bar-glow { position: absolute; top: 0; bottom: 0; width: 24px; background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, transparent 70%); transition: left 0.18s linear; pointer-events: none; }
+.np-time { display: flex; justify-content: space-between; font-family: var(--pix); font-size: 16px; color: var(--aqua); letter-spacing: 0.05em; text-shadow: 0 0 6px rgba(125,215,240,0.5); }
+.transport { display: flex; align-items: center; gap: 8px; }
+.gel-btn { height: 44px; padding: 0 16px; border-radius: 999px; border: none; background: var(--aqua-pill); color: #0a2a38; font-weight: 600; font-size: 14px; font-family: var(--sans); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -3px 6px rgba(0,40,70,0.4), 0 6px 14px rgba(0,0,0,0.45); letter-spacing: 0.02em; display: inline-flex; align-items: center; gap: 6px; transition: transform 0.08s, box-shadow 0.12s; }
+.gel-btn:hover { transform: translateY(-1px); }
+.gel-btn:active { background: var(--aqua-pill-press); transform: translateY(1px); box-shadow: inset 0 2px 4px rgba(0,30,60,0.5), 0 2px 4px rgba(0,0,0,0.3); }
+.gel-btn.round { width: 56px; height: 56px; padding: 0; border-radius: 50%; font-size: 22px; display: inline-flex; align-items: center; justify-content: center; }
+.gel-btn.round.big { width: 68px; height: 68px; font-size: 28px; }
+.gel-btn.ghost { background: var(--graphite); color: #1a1d22; }
+.gel-btn.acid { background: linear-gradient(180deg, #d8ff9b 0%, #8be045 48%, #4f9e16 50%, #b7f06d 100%); color: #0a1a00; }
+.gel-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.vol-wrap { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.vol-wrap label { font-family: var(--pix); font-size: 14px; color: var(--aqua); letter-spacing: 0.05em; }
+.vol-slider { -webkit-appearance: none; appearance: none; width: 110px; height: 8px; background: linear-gradient(180deg, #061a26, #0d2e3f); border-radius: 999px; border: 1px solid rgba(0,0,0,0.4); box-shadow: inset 0 1px 3px rgba(0,0,0,0.6); }
+.vol-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--aqua-pill); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -2px 4px rgba(0,40,70,0.4), 0 2px 6px rgba(0,0,0,0.4); border: none; cursor: pointer; }
+.steps { display: inline-grid; grid-template-columns: repeat(16, 1fr); gap: 3px; width: 220px; }
+.steps .s { height: 8px; border-radius: 2px; background: rgba(255,255,255,0.08); transition: background 0.06s, box-shadow 0.06s; }
+.steps .s.on { background: var(--aqua); box-shadow: 0 0 8px var(--aqua); }
+.steps .s.beat { background: rgba(125,215,240,0.18); }
+.tracklist { background: rgba(6,20,29,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; }
+.tracklist-head { display: grid; grid-template-columns: 32px 1.4fr 1fr 80px 64px 32px; gap: 12px; padding: 10px 16px; background: var(--chrome-bar); color: #1a2e38; font-family: var(--pix-bold); font-size: 14px; border-bottom: 1px solid rgba(0,0,0,0.2); }
+.track-row { display: grid; grid-template-columns: 32px 1.4fr 1fr 80px 64px 32px; gap: 12px; padding: 12px 16px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: background 0.12s; }
+.track-row:last-child { border-bottom: none; }
+.track-row:hover { background: rgba(125,215,240,0.06); }
+.track-row.playing { background: linear-gradient(90deg, rgba(125,215,240,0.18) 0%, rgba(125,215,240,0.04) 100%); }
+.track-row .num { font-family: var(--pix); font-size: 16px; color: var(--aqua); opacity: 0.7; }
+.track-row.playing .num { color: var(--acid); text-shadow: 0 0 6px var(--acid); }
+.track-row .title { font-family: var(--sans); font-weight: 600; font-size: 15px; color: #fff; }
+.track-row .sub { font-family: var(--sans); font-style: italic; font-size: 12px; color: var(--text-dim); }
+.track-row .meta { font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
+.track-row .plays { font-family: var(--pix); font-size: 16px; color: var(--aqua); text-align: right; letter-spacing: 0.04em; }
+.track-row .row-play { width: 24px; height: 24px; border-radius: 50%; background: var(--aqua-pill); display: flex; align-items: center; justify-content: center; color: #0a2a38; font-size: 10px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 2px 4px rgba(0,0,0,0.3); }
+.card { background: rgba(6,20,29,0.55); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 18px; }
+.card-title { font-family: var(--pix-bold); font-size: 22px; color: #fff; margin: 0 0 6px; text-shadow: 1px 1px 0 var(--bondi); }
+.card-sub { font-family: var(--sans); font-style: italic; color: var(--text-dim); font-size: 13px; margin-bottom: 12px; }
+.session-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
+.session { display: grid; grid-template-columns: 76px 1fr auto; gap: 16px; align-items: center; background: rgba(6,20,29,0.55); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 16px; position: relative; overflow: hidden; }
+.session.rsvped { border-color: rgba(165,255,90,0.4); box-shadow: 0 0 0 1px rgba(165,255,90,0.2), 0 0 24px rgba(165,255,90,0.08); }
+.session-date { width: 76px; height: 76px; background: var(--aqua-pill); border-radius: 10px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), inset 0 -3px 6px rgba(0,40,70,0.35); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #0a2a38; }
+.session-date .day { font-family: var(--pix-bold); font-size: 32px; line-height: 1; }
+.session-date .month { font-family: var(--pix); font-size: 14px; letter-spacing: 0.1em; margin-top: 2px; }
+.session-info .name { font-family: var(--pix-bold); font-size: 20px; color: #fff; margin-bottom: 2px; text-shadow: 1px 1px 0 var(--bondi); }
+.session-info .where { font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-bottom: 4px; letter-spacing: 0.08em; }
+.session-info .desc { font-family: var(--sans); font-style: italic; font-size: 13px; color: var(--text); }
+.rsvp-status { font-family: var(--pix); font-size: 14px; color: var(--acid); text-shadow: 0 0 4px var(--acid); }
+.rsvp-count { font-family: var(--mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; text-align: right; margin-top: 4px; }
+.gb-grid { display: grid; grid-template-columns: 360px 1fr; gap: 18px; }
+.gb-form { display: flex; flex-direction: column; gap: 10px; }
+.gb-form label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim); }
+.gb-form input, .gb-form textarea { font-family: var(--pix); font-size: 18px; background: #fff; color: #0a2a38; border: none; padding: 8px 10px; border-radius: 0; box-shadow: inset 1px 1px 0 #1a3a4a, inset -1px -1px 0 #b9d3de, inset 2px 2px 0 #0a1a22; }
+.gb-form textarea { min-height: 100px; resize: vertical; font-family: var(--pix); }
+.gb-form input:focus, .gb-form textarea:focus { outline: 2px solid var(--acid); outline-offset: 1px; }
+.gb-list { display: flex; flex-direction: column; gap: 10px; max-height: 540px; overflow: auto; padding-right: 6px; }
+.gb-entry { background: linear-gradient(180deg, #fff8d0 0%, #fbe78c 100%); color: #3a2a08; padding: 12px 14px; font-family: var(--pix); font-size: 17px; line-height: 1.3; box-shadow: 1px 1px 0 #c4a830, 3px 3px 0 #8c761d, 6px 6px 16px rgba(0,0,0,0.4); transform: rotate(-0.4deg); position: relative; }
+.gb-entry:nth-child(2n) { transform: rotate(0.6deg); background: linear-gradient(180deg,#d6f5ff 0%,#9bdcf3 100%); color: #06283a; box-shadow: 1px 1px 0 #5a9bb5, 3px 3px 0 #2a6f8f, 6px 6px 16px rgba(0,0,0,0.4); }
+.gb-entry:nth-child(3n) { transform: rotate(-0.2deg); background: linear-gradient(180deg,#ffd6f0 0%,#f5a8d8 100%); color: #4a0a3a; box-shadow: 1px 1px 0 #c45ba3, 3px 3px 0 #8c2c70, 6px 6px 16px rgba(0,0,0,0.4); }
+.gb-entry header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; font-family: var(--pix-bold); font-size: 14px; }
+.gb-entry header .when { font-family: var(--mono); font-size: 10px; opacity: 0.65; letter-spacing: 0.05em; font-weight: 400; }
+.gb-saving { font-family: var(--pix); font-size: 14px; color: var(--acid); opacity: 0.8; display: flex; align-items: center; gap: 6px; }
+.about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; }
+.member { display: flex; align-items: center; gap: 14px; padding: 10px 12px; background: rgba(6,20,29,0.55); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; }
+.member-art { width: 56px; height: 56px; border-radius: 8px; background: var(--aqua-pill); display: flex; align-items: center; justify-content: center; color: #0a2a38; font-family: var(--pix-bold); font-size: 22px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -3px 6px rgba(0,40,70,0.4); }
+.member-info .role { font-family: var(--pix-bold); font-size: 17px; color: #fff; text-shadow: 1px 1px 0 var(--bondi); }
+.member-info .who { font-family: var(--mono); font-size: 11px; color: var(--text-dim); letter-spacing: 0.05em; }
+.taskbar { position: fixed; left: 0; right: 0; bottom: 0; height: 48px; z-index: 5; background: linear-gradient(180deg, #b9d3de 0%, #6f93a3 50%, #4a6878 100%); border-top: 2px solid rgba(255,255,255,0.4); display: flex; align-items: center; gap: 6px; padding: 4px 8px; }
+.tb-start { background: var(--aqua-pill); color: #0a2a38; font-family: var(--pix-bold); font-size: 16px; padding: 6px 16px; border-radius: 999px; border: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -3px 6px rgba(0,40,70,0.4), 0 3px 8px rgba(0,0,0,0.4); display: inline-flex; align-items: center; gap: 6px; }
+.tb-mini-player { flex: 1; display: flex; align-items: center; gap: 10px; height: 36px; background: linear-gradient(180deg, #061a26 0%, #0d2e3f 100%); border: 1px solid rgba(0,0,0,0.4); border-radius: 6px; padding: 0 12px; color: var(--aqua); font-family: var(--pix); font-size: 16px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+.tb-mini-player .marquee { flex: 1; overflow: hidden; white-space: nowrap; }
+.tb-bars { display: flex; gap: 2px; align-items: end; height: 16px; }
+.tb-bars .b { width: 3px; background: var(--aqua); border-radius: 1px; box-shadow: 0 0 4px var(--aqua); transition: height 0.06s linear; }
+.tb-tray { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 10px; background: linear-gradient(180deg, #061a26 0%, #0d2e3f 100%); border: 1px solid rgba(0,0,0,0.4); border-radius: 6px; font-family: var(--pix); font-size: 16px; color: var(--aqua); box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+.first-run { position: fixed; inset: 0; z-index: 100; background: rgba(6,20,29,0.85); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 20px; }
+.first-run .panel { max-width: 420px; background: linear-gradient(180deg, #b9d3de 0%, #6f93a3 100%); border-radius: 12px; padding: 4px; box-shadow: 0 30px 80px rgba(0,0,0,0.7); }
+.first-run .panel-body { background: linear-gradient(180deg, #082c3e 0%, #061a26 100%); padding: 24px 28px; border-radius: 9px; color: var(--text); }
+.first-run h2 { font-family: var(--pix-bold); font-size: 36px; color: #fff; margin: 0 0 8px; text-shadow: 2px 2px 0 var(--bondi); }
+.first-run p { font-family: var(--sans); font-size: 14px; line-height: 1.55; color: var(--text-dim); margin: 0 0 16px; }
+.first-run p strong { color: #fff; }
+.online-badge { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 10px; color: var(--acid); letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.85; }
+.online-badge .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 5px var(--acid); animation: pulse-dot 1.8s infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.kicker { font-family: var(--mono); font-size: 11px; color: var(--text-dim); letter-spacing: 0.18em; text-transform: uppercase; }
+.muted { color: var(--text-dim); }
+@media (max-width: 1100px) {
+  .window { left: 20px; right: 20px; }
+  .desk-icons { display: none; }
+  .now-playing { grid-template-columns: 1fr; }
+  .np-art { width: 100%; max-width: 320px; height: 280px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .gb-grid { grid-template-columns: 1fr; }
+  .session-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+// =====================================================
+// Casinheiros Synth — Web Audio groove engine
+// =====================================================
+(function () {
+  function midi(n) { return 440 * Math.pow(2, (n - 69) / 12); }
+  const N = {
+    C2:36,D2:38,Eb2:39,E2:40,F2:41,G2:43,Ab2:44,A2:45,Bb2:46,B2:47,
+    C3:48,D3:50,Eb3:51,E3:52,F3:53,G3:55,Ab3:56,A3:57,Bb3:58,B3:59,
+    C4:60,D4:62,Eb4:63,E4:64,F4:65,G4:67,Ab4:68,A4:69,Bb4:70,B4:71,
+    C5:72,D5:74,Eb5:75,F5:77,G5:79,
+  };
+  const _ = null;
+
+  class CasinheirosSynth {
+    constructor() {
+      this.ctx=null; this.master=null; this.analyser=null;
+      this.playing=false; this.step=0; this.bpm=96;
+      this.lookahead=25.0; this.scheduleAheadTime=0.1;
+      this.nextNoteTime=0; this.currentTrack=null;
+      this.timer=null; this.onStep=null; this.onLevel=null;
+      this._levelTimer=null; this._volume=0.55;
+    }
+    _ensureCtx() {
+      if (!this.ctx) {
+        const C = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new C();
+        this.master = this.ctx.createGain();
+        this.master.gain.value = this._volume;
+        this.comp = this.ctx.createDynamicsCompressor();
+        this.comp.threshold.value=-16; this.comp.knee.value=8;
+        this.comp.ratio.value=3; this.comp.attack.value=0.005; this.comp.release.value=0.15;
+        this.analyser = this.ctx.createAnalyser();
+        this.analyser.fftSize = 512;
+        this.master.connect(this.comp).connect(this.analyser).connect(this.ctx.destination);
+      }
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+    }
+    setVolume(v) {
+      this._volume = Math.max(0, Math.min(1, v));
+      if (this.master) this.master.gain.linearRampToValueAtTime(this._volume, (this.ctx?.currentTime||0)+0.05);
+    }
+    _kick(time, vel=1) {
+      const o=this.ctx.createOscillator(), g=this.ctx.createGain();
+      o.type='sine'; o.frequency.setValueAtTime(140,time); o.frequency.exponentialRampToValueAtTime(38,time+0.18);
+      g.gain.setValueAtTime(0.0001,time); g.gain.exponentialRampToValueAtTime(0.9*vel,time+0.005); g.gain.exponentialRampToValueAtTime(0.001,time+0.22);
+      o.connect(g).connect(this.master); o.start(time); o.stop(time+0.25);
+    }
+    _snare(time, vel=0.7) {
+      const buf=this.ctx.createBuffer(1,this.ctx.sampleRate*0.18,this.ctx.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(this.ctx.sampleRate*0.05));
+      const src=this.ctx.createBufferSource(); src.buffer=buf;
+      const hp=this.ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1400;
+      const g=this.ctx.createGain(); g.gain.value=0.45*vel;
+      src.connect(hp).connect(g).connect(this.master);
+      const o=this.ctx.createOscillator(), og=this.ctx.createGain();
+      o.type='triangle'; o.frequency.setValueAtTime(220,time); o.frequency.exponentialRampToValueAtTime(160,time+0.05);
+      og.gain.setValueAtTime(0.25*vel,time); og.gain.exponentialRampToValueAtTime(0.001,time+0.08);
+      o.connect(og).connect(this.master);
+      src.start(time); o.start(time); o.stop(time+0.1);
+    }
+    _hat(time, vel=0.3, open=false) {
+      const len=open?0.18:0.04;
+      const buf=this.ctx.createBuffer(1,this.ctx.sampleRate*len,this.ctx.sampleRate);
+      const d=buf.getChannelData(0);
+      const decay=open?0.06:0.012;
+      for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.exp(-i/(this.ctx.sampleRate*decay));
+      const src=this.ctx.createBufferSource(); src.buffer=buf;
+      const hp=this.ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=7500;
+      const g=this.ctx.createGain(); g.gain.value=0.22*vel;
+      src.connect(hp).connect(g).connect(this.master); src.start(time);
+    }
+    _bass(time, note, dur=0.22, vel=0.5) {
+      const o=this.ctx.createOscillator(), o2=this.ctx.createOscillator();
+      const g=this.ctx.createGain(), f=this.ctx.createBiquadFilter();
+      f.type='lowpass'; f.frequency.setValueAtTime(1400,time); f.frequency.exponentialRampToValueAtTime(600,time+0.12); f.Q.value=4;
+      o.type='sawtooth'; o2.type='square';
+      o.frequency.value=midi(note); o2.frequency.value=midi(note-12);
+      g.gain.setValueAtTime(0.0001,time); g.gain.exponentialRampToValueAtTime(0.45*vel,time+0.005); g.gain.exponentialRampToValueAtTime(0.001,time+dur);
+      o.connect(f); o2.connect(f); f.connect(g).connect(this.master);
+      o.start(time); o2.start(time); o.stop(time+dur+0.05); o2.stop(time+dur+0.05);
+    }
+    _key(time, note, dur=0.4, vel=0.4) {
+      const o=this.ctx.createOscillator(), o2=this.ctx.createOscillator();
+      const g=this.ctx.createGain(), g2=this.ctx.createGain();
+      const f=this.ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=2800; f.Q.value=0.7;
+      o.type='triangle'; o.frequency.value=midi(note);
+      o2.type='sine'; o2.frequency.value=midi(note)*2.01;
+      g2.gain.value=midi(note)*0.4;
+      o2.connect(g2).connect(o.frequency);
+      g.gain.setValueAtTime(0.0001,time); g.gain.exponentialRampToValueAtTime(0.14*vel,time+0.01); g.gain.exponentialRampToValueAtTime(0.001,time+dur);
+      o.connect(f).connect(g).connect(this.master); o.start(time); o2.start(time); o.stop(time+dur+0.05); o2.stop(time+dur+0.05);
+    }
+    _chord(time, notes, dur=0.7, vel=0.35) { notes.forEach(n => this._key(time, n, dur, vel*0.8)); }
+    _guitar(time, note, dur=0.18, vel=0.4) {
+      const o=this.ctx.createOscillator(), g=this.ctx.createGain();
+      const f=this.ctx.createBiquadFilter(); f.type='bandpass'; f.frequency.value=midi(note)*2.5; f.Q.value=1.2;
+      o.type='square'; o.frequency.value=midi(note);
+      g.gain.setValueAtTime(0.0001,time); g.gain.exponentialRampToValueAtTime(0.18*vel,time+0.004); g.gain.exponentialRampToValueAtTime(0.001,time+dur);
+      o.connect(f).connect(g).connect(this.master); o.start(time); o.stop(time+dur+0.05);
+    }
+    play(track) {
+      this._ensureCtx(); this.stop();
+      this.currentTrack=track; this.bpm=track.bpm||96;
+      this.step=0; this.nextNoteTime=this.ctx.currentTime+0.06;
+      this.playing=true; this._tick(); this._startLevelLoop();
+    }
+    _tick() {
+      if (!this.playing) return;
+      const secPerStep=60/this.bpm/4;
+      while (this.nextNoteTime < this.ctx.currentTime+this.scheduleAheadTime) {
+        this._scheduleStep(this.step, this.nextNoteTime);
+        if (this.onStep) {
+          const s=this.step, when=this.nextNoteTime;
+          const fireIn=(when-this.ctx.currentTime)*1000;
+          setTimeout(() => this.onStep && this.onStep(s), Math.max(0,fireIn));
+        }
+        this.nextNoteTime+=secPerStep;
+        this.step=(this.step+1)%16;
+      }
+      this.timer=setTimeout(() => this._tick(), this.lookahead);
+    }
+    _scheduleStep(step, time) {
+      const t=this.currentTrack; if(!t) return;
+      const p=t.patterns;
+      if(p.kick  && p.kick[step])  this._kick(time);
+      if(p.snare && p.snare[step]) this._snare(time);
+      if(p.hat) { const h=p.hat[step]; if(h===1)this._hat(time,0.25,false); else if(h===2)this._hat(time,0.4,true); }
+      if(p.bass && p.bass[step]!=null) this._bass(time,p.bass[step]);
+      if(p.keys && p.keys[step]) this._chord(time,p.keys[step],0.6,0.4);
+      if(p.gtr  && p.gtr[step] !=null) this._guitar(time,p.gtr[step]);
+    }
+    stop() {
+      this.playing=false;
+      if(this.timer){clearTimeout(this.timer);this.timer=null;}
+      if(this._levelTimer){cancelAnimationFrame(this._levelTimer);this._levelTimer=null;}
+      if(this.onLevel) this.onLevel(0);
+    }
+    _startLevelLoop() {
+      if(!this.analyser) return;
+      const buf=new Uint8Array(this.analyser.fftSize);
+      const loop=() => {
+        if(!this.playing) return;
+        this.analyser.getByteTimeDomainData(buf);
+        let sum=0;
+        for(let i=0;i<buf.length;i++){const v=(buf[i]-128)/128; sum+=v*v;}
+        const rms=Math.sqrt(sum/buf.length);
+        if(this.onLevel) this.onLevel(rms);
+        this._levelTimer=requestAnimationFrame(loop);
+      };
+      this._levelTimer=requestAnimationFrame(loop);
+    }
+  }
+
+  const TRACKS = [
+    { id:'annex-theme', title:'Annex Theme', subtitle:'opening groove · the four of us walking in', bpm:96, lengthSec:198,
+      patterns:{ kick:[1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0], snare:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1], hat:[1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,2], bass:[N.A2,_,N.A2,_,_,N.E3,_,N.G2,N.A2,_,N.A2,_,N.D3,_,N.C3,N.E2], keys:[_,_,_,_,[N.A3,N.C4,N.E4,N.G4],_,_,_,_,_,_,_,[N.D3,N.F3,N.A3,N.C4],_,_,_], gtr:[_,_,N.E4,_,_,_,_,N.G4,_,_,N.E4,_,_,N.A4,_,N.G4] }},
+    { id:'backyard-funk', title:'Backyard Funk', subtitle:"the one with the bassline that won't quit", bpm:108, lengthSec:224,
+      patterns:{ kick:[1,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0], snare:[0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0], hat:[1,1,1,1,1,1,1,2,1,1,1,1,1,1,2,1], bass:[N.E2,_,N.E2,N.G2,N.E2,_,N.B2,_,N.E2,N.D2,_,N.E2,_,N.G2,N.A2,N.B2], keys:[[N.E3,N.G3,N.B3],_,_,_,_,_,_,_,[N.A3,N.C4,N.E4],_,_,_,_,_,_,_], gtr:[N.B4,_,_,N.E5,_,N.D5,_,_,N.B4,_,N.G4,_,N.A4,_,N.B4,_] }},
+    { id:'rain-over-ovar', title:'Rain Over Ovar', subtitle:'slow drift, windows fogged, lights low', bpm:78, lengthSec:274,
+      patterns:{ kick:[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0], snare:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0], hat:[1,0,0,1,1,0,1,0,1,0,0,1,1,0,1,2], bass:[N.D2,_,_,_,_,N.A2,_,_,_,_,N.F2,_,_,N.C3,_,_], keys:[[N.D3,N.F3,N.A3,N.C4],_,_,_,_,_,_,_,[N.F3,N.A3,N.C4,N.E4],_,_,_,_,_,_,_], gtr:[_,_,_,_,_,_,_,N.A4,_,_,_,_,_,N.D5,_,_] }},
+    { id:'stairwell', title:'Stairwell Session', subtitle:'recorded in the corridor · natural reverb', bpm:100, lengthSec:186,
+      patterns:{ kick:[1,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0], snare:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0], hat:[1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1], bass:[N.G2,_,N.G2,_,_,N.B2,_,N.D3,N.G2,_,_,N.F2,_,N.D3,_,N.C3], keys:[_,_,_,_,[N.G3,N.B3,N.D4],_,_,_,_,_,_,_,[N.C4,N.E4,N.G4],_,_,_], gtr:[_,N.D5,_,_,N.B4,_,_,N.G4,_,_,N.D5,_,_,_,N.E5,_] }},
+    { id:'salt-pans', title:'The Salt Pans', subtitle:'dreamy keys · for the flat horizon outside the city', bpm:86, lengthSec:252,
+      patterns:{ kick:[1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0], snare:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0], hat:[1,0,1,0,1,0,1,2,1,0,1,0,1,0,1,0], bass:[N.F2,_,_,_,_,_,N.C3,_,_,N.Bb2,_,_,_,_,N.A2,_], keys:[[N.F3,N.A3,N.C4,N.E4],_,_,_,_,_,_,_,[N.Bb2+12,N.D4,N.F4,N.A4],_,_,_,_,_,_,_], gtr:[_,_,_,N.C5,_,_,_,_,_,_,_,N.A4,_,_,_,_] }},
+    { id:'late-night', title:'Late-Night Anexo', subtitle:'the closer · porch lights off, amps still warm', bpm:92, lengthSec:308,
+      patterns:{ kick:[1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0], snare:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1], hat:[1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,2], bass:[N.C2,_,N.C2,_,_,N.G2,_,N.Eb3,N.C3,_,_,N.Bb2,_,N.Ab2,_,N.G2], keys:[[N.C3,N.Eb3,N.G3,N.Bb3],_,_,_,_,_,_,_,[N.F3,N.Ab3,N.C4,N.Eb4],_,_,_,_,_,_,_], gtr:[_,_,N.G4,_,N.Eb5,_,_,N.D5,_,_,N.C5,_,_,N.Bb4,_,N.G4] }},
+  ];
+
+  window.CasinheirosSynth = CasinheirosSynth;
+  window.CASINHEIROS_TRACKS = TRACKS;
+})();
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
+const SESSIONS = [
+  { id:'s-2026-05-28', day:28, monthIdx:4, year:2026, name:'Anexo Session no7', where:'the casinha · Ovar', desc:'rainy-day chairs and the new bassline.' },
+  { id:'s-2026-06-04', day:4,  monthIdx:5, year:2026, name:'Salt Pan Sunset',   where:'salinas de Ovar',  desc:'outdoor jam if the weather holds.' },
+  { id:'s-2026-06-19', day:19, monthIdx:5, year:2026, name:'Stairwell no2',     where:'casinha · stairwell', desc:'natural reverb experiment.' },
+  { id:'s-2026-07-03', day:3,  monthIdx:6, year:2026, name:'Backyard Funk Night', where:'the casinha · backyard', desc:'friends-only, bring something to share.' },
+];
+
+const MEMBERS = [
+  { glyph:'G', role:'guitar', who:'lead lines, late-night chords' },
+  { glyph:'B', role:'bass',   who:"the one who won't let the groove die" },
+  { glyph:'K', role:'keys',   who:'electric piano, occasional synths' },
+  { glyph:'D', role:'drums',  who:'brushes, breakbeats, the metronome' },
+];
+
+// ── local storage (per-device) ──────────────────────
+const LS = {
+  get(key, fallback) {
+    try { const v = localStorage.getItem('casinheiros:' + key); return v == null ? fallback : JSON.parse(v); }
+    catch { return fallback; }
+  },
+  set(key, val) {
+    try { localStorage.setItem('casinheiros:' + key, JSON.stringify(val)); } catch {}
+  },
+};
+
+// ── shared storage (all visitors) ──────────────────
+// Uses window.storage when available (artifact env), otherwise falls back to localStorage
+const SharedDB = {
+  async get(key, fallback = null) {
+    if (window.storage) {
+      try {
+        const r = await window.storage.get('casinheiros:' + key, true);
+        return r ? JSON.parse(r.value) : fallback;
+      } catch { return fallback; }
+    }
+    return LS.get('shared:' + key, fallback);
+  },
+  async set(key, val) {
+    if (window.storage) {
+      try { await window.storage.set('casinheiros:' + key, JSON.stringify(val), true); } catch(e) { console.warn('SharedDB set failed', e); }
+    } else {
+      LS.set('shared:' + key, val);
+    }
+  },
+};
+
+function fmtTime(sec) {
+  sec = Math.max(0, Math.floor(sec));
+  return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
+}
+
+// ══════════════════════════════════════════════════════
+// App
+// ══════════════════════════════════════════════════════
+function App() {
+  const [page, setPage] = useState(() => LS.get('page', 'listen'));
+  const [tracks] = useState(window.CASINHEIROS_TRACKS);
+
+  // player
+  const [trackIdx, setTrackIdx] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [position, setPosition] = useState(0);
+  const [volume, setVolume] = useState(() => LS.get('vol', 0.55));
+  const [activeStep, setActiveStep] = useState(-1);
+  const [level, setLevel] = useState(0);
+
+  // local state
+  const [plays, setPlays] = useState(() => LS.get('plays', {}));
+  const [rsvps, setRsvps] = useState(() => LS.get('rsvps', {}));
+  const [welcomed, setWelcomed] = useState(() => LS.get('welcomed', false));
+
+  // shared state (from backend)
+  const [guestbook, setGuestbook] = useState([]);
+  const [gbLoaded, setGbLoaded] = useState(false);
+  const [rsvpTotals, setRsvpTotals] = useState({});
+
+  // Load shared data on mount
+  useEffect(() => {
+    SharedDB.get('guestbook', []).then(entries => {
+      setGuestbook(entries);
+      setGbLoaded(true);
+    });
+    SharedDB.get('rsvp-totals', {}).then(totals => {
+      setRsvpTotals(totals);
+    });
+  }, []);
+
+  const synthRef = useRef(null);
+  useEffect(() => {
+    synthRef.current = new window.CasinheirosSynth();
+    synthRef.current.onStep = (s) => setActiveStep(s);
+    synthRef.current.onLevel = (rms) => setLevel(rms);
+    synthRef.current.setVolume(volume);
+    return () => { try { synthRef.current.stop(); } catch {} };
+  }, []);
+
+  useEffect(() => {
+    if (!playing) return;
+    const id = setInterval(() => {
+      setPosition(p => {
+        const t = tracks[trackIdx];
+        if (p + 0.25 >= t.lengthSec) { handleNext(); return 0; }
+        return p + 0.25;
+      });
+    }, 250);
+    return () => clearInterval(id);
+  }, [playing, trackIdx]);
+
+  useEffect(() => LS.set('page', page), [page]);
+  useEffect(() => LS.set('vol', volume), [volume]);
+  useEffect(() => LS.set('plays', plays), [plays]);
+  useEffect(() => LS.set('rsvps', rsvps), [rsvps]);
+
+  function handlePlay(idx) {
+    const i = idx == null ? trackIdx : idx;
+    if (i !== trackIdx) {
+      setTrackIdx(i); setPosition(0);
+      synthRef.current.play(tracks[i]); bumpPlay(tracks[i].id);
+    } else if (!playing) {
+      synthRef.current.play(tracks[i]); bumpPlay(tracks[i].id);
+    }
+    setPlaying(true);
+  }
+  function handlePause() { synthRef.current.stop(); setPlaying(false); }
+  function handleToggle() { if (playing) handlePause(); else handlePlay(); }
+  function handleNext() {
+    const i = (trackIdx + 1) % tracks.length;
+    setTrackIdx(i); setPosition(0);
+    if (playing) { synthRef.current.play(tracks[i]); bumpPlay(tracks[i].id); }
+  }
+  function handlePrev() {
+    if (position > 3) { setPosition(0); return; }
+    const i = (trackIdx - 1 + tracks.length) % tracks.length;
+    setTrackIdx(i); setPosition(0);
+    if (playing) { synthRef.current.play(tracks[i]); bumpPlay(tracks[i].id); }
+  }
+  function bumpPlay(id) { setPlays(p => ({ ...p, [id]: (p[id]||0)+1 })); }
+  function changeVolume(v) { setVolume(v); synthRef.current && synthRef.current.setVolume(v); }
+  function seek(frac) {
+    const len = tracks[trackIdx].lengthSec;
+    setPosition(Math.max(0, Math.min(len-0.5, frac*len)));
+  }
+
+  async function handleAddGuestbook(entry) {
+    const updated = [entry, ...guestbook];
+    setGuestbook(updated);
+    await SharedDB.set('guestbook', updated);
+  }
+
+  async function handleToggleRsvp(id) {
+    const wasRsvped = !!rsvps[id];
+    const newRsvps = { ...rsvps, [id]: !wasRsvped };
+    setRsvps(newRsvps);
+
+    const newTotals = { ...rsvpTotals };
+    newTotals[id] = Math.max(0, (newTotals[id] || 0) + (wasRsvped ? -1 : 1));
+    setRsvpTotals(newTotals);
+    await SharedDB.set('rsvp-totals', newTotals);
+  }
+
+  const track = tracks[trackIdx];
+
+  return (
+    <React.Fragment>
+      <div className="desktop">
+        <div className="desk-icons">
+          {[{i:'♪',label:'jams'},{i:'✶',label:'casinha'},{i:'◈',label:'demos~01'},{i:'@',label:'mail'}].map((it,i) => (
+            <div key={i} className="desk-icon">
+              <div className="glyph">{it.i}</div>
+              <span>{it.label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="window">
+          <TitleBar page={page} track={track} playing={playing} />
+          <div className="win-body">
+            <Sidebar page={page} setPage={setPage} playing={playing} track={track} />
+            <main className="content">
+              {page === 'listen' && (
+                <Listen tracks={tracks} trackIdx={trackIdx} track={track} playing={playing}
+                  position={position} activeStep={activeStep} level={level} volume={volume} plays={plays}
+                  onPlay={handlePlay} onPause={handlePause} onToggle={handleToggle}
+                  onNext={handleNext} onPrev={handlePrev} onSeek={seek} onVolume={changeVolume} />
+              )}
+              {page === 'sessions' && (
+                <Sessions rsvps={rsvps} rsvpTotals={rsvpTotals} onToggleRsvp={handleToggleRsvp} />
+              )}
+              {page === 'guestbook' && (
+                <Guestbook entries={guestbook} loaded={gbLoaded} onAdd={handleAddGuestbook} />
+              )}
+              {page === 'about' && (
+                <About plays={plays} guestbook={guestbook} rsvps={rsvps} rsvpTotals={rsvpTotals} />
+              )}
+            </main>
+          </div>
+        </div>
+      </div>
+      <Taskbar track={track} playing={playing} level={level} onToggle={handleToggle} />
+      {!welcomed && (
+        <FirstRun
+          onDismiss={() => { setWelcomed(true); LS.set('welcomed', true); }}
+          onListen={() => { setWelcomed(true); LS.set('welcomed', true); handlePlay(0); }}
+        />
+      )}
+    </React.Fragment>
+  );
+}
+
+// ── Title Bar ─────────────────────────────────────────
+function TitleBar({ page, track, playing }) {
+  const labels = { listen:'listen', sessions:'sessions', guestbook:'guestbook', about:'about' };
+  return (
+    <div className="title-bar">
+      <div className="tb-lights"><span className="r"/><span className="y"/><span className="g"/></div>
+      <div className="tb-title">casinheiros.app — {labels[page]}</div>
+      <div className="tb-meta">
+        <span className="dot"/>
+        <span>{playing ? `now playing · ${track.title}` : 'idle · since 2026'}</span>
+      </div>
+    </div>
+  );
+}
+
+// ── Sidebar ───────────────────────────────────────────
+function Sidebar({ page, setPage, playing, track }) {
+  const items = [
+    { id:'listen',    label:'Listen',    icon:'♪' },
+    { id:'sessions',  label:'Sessions',  icon:'✶' },
+    { id:'guestbook', label:'Guestbook', icon:'✎' },
+    { id:'about',     label:'About',     icon:'i' },
+  ];
+  return (
+    <nav className="sidebar">
+      <h4>navigate</h4>
+      {items.map(it => (
+        <button key={it.id} className={'nav-btn' + (page===it.id?' active':'')} onClick={() => setPage(it.id)}>
+          <span className="pix-icon">{it.icon}</span>
+          <span>{it.label}</span>
+        </button>
+      ))}
+      <h4 style={{marginTop:18}}>now playing</h4>
+      <div style={{padding:'8px 10px',fontFamily:'var(--pix)',fontSize:16,color:'#fff',lineHeight:1.1}}>
+        {playing ? <span>▸ {track.title}</span> : <span style={{opacity:0.5}}>— silent —</span>}
+      </div>
+      <div className="sidebar-foot">
+        casinheiros<br/>acid jazz from Ovar<br/>anexo recordings · MMXXVI
+      </div>
+    </nav>
+  );
+}
+
+// ── Listen ────────────────────────────────────────────
+function Listen({ tracks, trackIdx, track, playing, position, activeStep, level, volume, plays, onPlay, onPause, onToggle, onNext, onPrev, onSeek, onVolume }) {
+  const frac = Math.min(1, position / track.lengthSec);
+  function onBarClick(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    onSeek((e.clientX - rect.left) / rect.width);
+  }
+  return (
+    <div>
+      <div className="eyebrow">▸ listen · 6 tracks · live from the anexo</div>
+      <h1 className="page-title">Listen.</h1>
+      <div className="page-sub">
+        Six instrumental grooves recorded in <strong>the casinha</strong> — an annex behind a friend's house in Ovar.
+        Press play. Audio is synthesised live in your browser, so each session sounds slightly different.
+      </div>
+      <div className="now-playing">
+        <div className="np-art">
+          <div className="np-art-inner">
+            <div className="pix-glyph">CASA</div>
+            <div className="pix-label">{track.title.toUpperCase()}</div>
+          </div>
+          <div className="rec"><span className="blob"/>{playing?'PLAY':'IDLE'}  {fmtTime(position)}</div>
+          <div className="scan"/>
+        </div>
+        <div className="np-info">
+          <div className="np-eyebrow">track {String(trackIdx+1).padStart(2,'0')} / {String(tracks.length).padStart(2,'0')} · {track.bpm} bpm</div>
+          <h2 className="np-title">{track.title}</h2>
+          <div className="np-subtitle" dangerouslySetInnerHTML={{__html: track.subtitle}}/>
+          <StepGrid activeStep={activeStep} playing={playing}/>
+          <div className="np-scrub">
+            <div className="np-bar" onClick={onBarClick}>
+              <div className="np-bar-fill" style={{width:`${frac*100}%`}}/>
+              <div className="np-bar-glow" style={{left:`calc(${frac*100}% - 12px)`}}/>
+            </div>
+            <div className="np-time">
+              <span>{fmtTime(position)}</span>
+              <span style={{opacity:0.6}}>{playing?'◉ live · synthesised':'·'}</span>
+              <span>{fmtTime(track.lengthSec)}</span>
+            </div>
+          </div>
+          <div className="transport">
+            <button className="gel-btn round" onClick={onPrev}>⏮</button>
+            <button className="gel-btn round big" onClick={onToggle}>{playing?'❚❚':'▶'}</button>
+            <button className="gel-btn round" onClick={onNext}>⏭</button>
+            <div className="vol-wrap">
+              <label>vol</label>
+              <input className="vol-slider" type="range" min="0" max="1" step="0.01" value={volume}
+                onChange={e => onVolume(parseFloat(e.target.value))}/>
+              <span style={{fontFamily:'var(--pix)',fontSize:14,color:'var(--aqua)',minWidth:28}}>{Math.round(volume*100)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="tracklist">
+        <div className="tracklist-head">
+          <span>#</span><span>track</span><span>note</span>
+          <span style={{textAlign:'right'}}>length</span>
+          <span style={{textAlign:'right'}}>plays</span>
+          <span></span>
+        </div>
+        {tracks.map((t,i) => (
+          <div key={t.id} className={'track-row'+(i===trackIdx?' playing':'')}
+            onClick={() => { if(i===trackIdx && playing) onPause(); else onPlay(i); }}>
+            <span className="num">{i===trackIdx && playing ? '♪' : String(i+1).padStart(2,'0')}</span>
+            <div>
+              <div className="title">{t.title}</div>
+              <div className="sub" dangerouslySetInnerHTML={{__html:t.subtitle}}/>
+            </div>
+            <div className="meta">{t.bpm} bpm · jam #{String(i+1).padStart(2,'0')}</div>
+            <div className="meta" style={{textAlign:'right'}}>{fmtTime(t.lengthSec)}</div>
+            <div className="plays">{plays[t.id]||0}</div>
+            <div style={{display:'flex',justifyContent:'flex-end'}}>
+              <div className="row-play">{i===trackIdx && playing?'❚❚':'▶'}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{marginTop:22,display:'flex',gap:16,alignItems:'center'}}>
+        <span className="kicker">tip</span>
+        <span className="muted" style={{fontStyle:'italic'}}>Play counts saved locally. Guestbook and RSVPs are shared — everyone sees them.</span>
+      </div>
+    </div>
+  );
+}
+
+function StepGrid({ activeStep, playing }) {
+  const cells = [];
+  for (let i=0; i<16; i++) {
+    const beat = i%4===0, on = playing && activeStep===i;
+    cells.push(<div key={i} className={'s'+(on?' on':'')+((!on&&beat)?' beat':'')}/>);
+  }
+  return <div className="steps">{cells}</div>;
+}
+
+// ── Sessions ──────────────────────────────────────────
+function Sessions({ rsvps, rsvpTotals, onToggleRsvp }) {
+  const myTotal = Object.values(rsvps).filter(Boolean).length;
+  return (
+    <div>
+      <div className="eyebrow">▸ sessions · upcoming jams</div>
+      <h1 className="page-title">Sessions.</h1>
+      <div className="page-sub">
+        We jam most weeks in <strong>the casinha</strong>, an annex in Ovar.
+        RSVP if you'd like to drop by — capacity is small. Your RSVP updates the live count for everyone.
+      </div>
+      <div className="session-grid">
+        {SESSIONS.map(s => (
+          <div key={s.id} className={'session'+(rsvps[s.id]?' rsvped':'')}>
+            <div className="session-date">
+              <div className="day">{s.day}</div>
+              <div className="month">{MONTHS[s.monthIdx]}</div>
+            </div>
+            <div className="session-info">
+              <div className="name">{s.name}</div>
+              <div className="where">{s.where.toUpperCase()}</div>
+              <div className="desc">{s.desc}</div>
+            </div>
+            <div style={{display:'flex',flexDirection:'column',alignItems:'flex-end',gap:6}}>
+              <button className={'gel-btn '+(rsvps[s.id]?'acid':'')} onClick={() => onToggleRsvp(s.id)}>
+                {rsvps[s.id] ? "✓ you're in" : 'RSVP'}
+              </button>
+              {rsvps[s.id] && <div className="rsvp-status">see you there ✶</div>}
+              <div className="rsvp-count">
+                {(rsvpTotals[s.id]||0)} going
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="card" style={{marginTop:18}}>
+        <div className="kicker">Your status</div>
+        <div style={{marginTop:6,fontFamily:'var(--pix)',fontSize:22,color:'#fff'}}>
+          {myTotal===0 && <span>nothing yet — pick a session above.</span>}
+          {myTotal>0 && <span>RSVP'd to {myTotal} session{myTotal>1?'s':''}.</span>}
+        </div>
+        <div style={{marginTop:10,fontFamily:'var(--sans)',fontStyle:'italic',color:'var(--text-dim)'}}>
+          Got the address? Good. If not, sign the guestbook — we'll send it over.
+        </div>
+        <div style={{marginTop:12,display:'flex',alignItems:'center',gap:8}}>
+          <div className="online-badge"><span className="pulse"/><span>live counts · shared with everyone</span></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Guestbook ─────────────────────────────────────────
+function Guestbook({ entries, loaded, onAdd }) {
+  const [name, setName] = useState('');
+  const [from, setFrom] = useState('');
+  const [note, setNote] = useState('');
+  const [touched, setTouched] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  async function submit(e) {
+    e.preventDefault();
+    if (!name.trim() || !note.trim()) { setTouched(true); return; }
+    setSaving(true);
+    const entry = {
+      id: 'gb-' + Date.now(),
+      name: name.trim(),
+      from: from.trim() || '—',
+      note: note.trim(),
+      when: Date.now(),
+    };
+    await onAdd(entry);
+    setName(''); setFrom(''); setNote(''); setTouched(false); setSaving(false);
+  }
+
+  return (
+    <div>
+      <div className="eyebrow">▸ guestbook · leave a note</div>
+      <h1 className="page-title">Guestbook.</h1>
+      <div className="page-sub">
+        Sign in. Notes are <strong>shared with everyone</strong> who visits — we'll read them out before the next session.
+      </div>
+      <div style={{marginBottom:14,display:'flex',alignItems:'center',gap:8}}>
+        <div className="online-badge"><span className="pulse"/><span>shared · {loaded ? entries.length : '…'} notes from everyone</span></div>
+      </div>
+      <div className="gb-grid">
+        <form className="gb-form card" onSubmit={submit}>
+          <label htmlFor="gb-name">your name</label>
+          <input id="gb-name" value={name} onChange={e=>setName(e.target.value)} placeholder="ex: Joana"/>
+          {touched && !name.trim() && <div style={{fontFamily:'var(--pix)',color:'var(--hibisco)',fontSize:14}}>* name?</div>}
+          <label htmlFor="gb-from">where from</label>
+          <input id="gb-from" value={from} onChange={e=>setFrom(e.target.value)} placeholder="ex: Ovar / Porto / somewhere far"/>
+          <label htmlFor="gb-note">your note</label>
+          <textarea id="gb-note" value={note} onChange={e=>setNote(e.target.value)} placeholder="favourite track, a request, or just hello"/>
+          {touched && !note.trim() && <div style={{fontFamily:'var(--pix)',color:'var(--hibisco)',fontSize:14}}>* say something</div>}
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginTop:6,gap:10}}>
+            {saving
+              ? <div className="gb-saving">✦ saving…</div>
+              : <span className="kicker">shared with everyone</span>
+            }
+            <button type="submit" className="gel-btn acid" disabled={saving}>▸ sign the book</button>
+          </div>
+        </form>
+        <div>
+          <div className="kicker" style={{marginBottom:8}}>
+            {!loaded ? 'loading…' : entries.length===0 ? 'no notes yet — be the first.' : `${entries.length} note${entries.length>1?'s':''}`}
+          </div>
+          <div className="gb-list">
+            {!loaded && (
+              <div style={{fontFamily:'var(--sans)',fontStyle:'italic',color:'var(--text-dim)',padding:24,textAlign:'center',border:'1px dashed rgba(255,255,255,0.15)',borderRadius:10}}>
+                Loading notes…
+              </div>
+            )}
+            {loaded && entries.length===0 && (
+              <div style={{fontFamily:'var(--sans)',fontStyle:'italic',color:'var(--text-dim)',padding:24,border:'1px dashed rgba(255,255,255,0.15)',borderRadius:10,textAlign:'center'}}>
+                The page is empty. Sign on the left — your note lands here for everyone.
+              </div>
+            )}
+            {entries.map(e => (
+              <article key={e.id} className="gb-entry">
+                <header>
+                  <span>{e.name} <span style={{opacity:0.7,fontFamily:'var(--mono)',fontSize:11}}>· {e.from}</span></span>
+                  <span className="when">{new Date(e.when).toLocaleDateString(undefined,{day:'2-digit',month:'short'})}</span>
+                </header>
+                <div>{e.note}</div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── About ─────────────────────────────────────────────
+function About({ plays, guestbook, rsvps, rsvpTotals }) {
+  const totalPlays = Object.values(plays).reduce((a,b)=>a+b,0);
+  const myRsvps = Object.values(rsvps).filter(Boolean).length;
+  const totalRsvps = Object.values(rsvpTotals).reduce((a,b)=>a+b,0);
+  return (
+    <div>
+      <div className="eyebrow">▸ about · who, where, why</div>
+      <h1 className="page-title">About.</h1>
+      <div className="page-sub">
+        <strong>Casinheiros</strong> — four homebodies who jam acid jazz and funky grooves in an annex
+        behind a friend's house in Ovar, Portugal. Guitar, bass, a Rhodes-ish keyboard, and drums against the cold wall.
+      </div>
+      <div className="about-grid">
+        <div className="card">
+          <div className="card-title">The four of us</div>
+          <div className="card-sub">guitar · bass · keys · drums</div>
+          <div style={{display:'grid',gap:10}}>
+            {MEMBERS.map((m,i) => (
+              <div key={i} className="member">
+                <div className="member-art">{m.glyph}</div>
+                <div className="member-info">
+                  <div className="role">{m.role}</div>
+                  <div className="who">{m.who}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:16}}>
+          <div className="card">
+            <div className="card-title">The casinha</div>
+            <div className="card-sub">our annex / rehearsal room</div>
+            <p style={{margin:0,lineHeight:1.5,color:'var(--text)'}}>
+              A small annex (<em>casinha</em>, "little house") behind a friend's family home, two streets from the Ovar train line. Concrete floor, one window, four people, four amps.
+            </p>
+            <div style={{marginTop:12,display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,fontFamily:'var(--mono)',fontSize:11}}>
+              <div><span style={{color:'var(--text-dim)'}}>City</span><br/>Ovar, Portugal</div>
+              <div><span style={{color:'var(--text-dim)'}}>Founded</span><br/>2026</div>
+              <div><span style={{color:'var(--text-dim)'}}>Genre</span><br/>acid jazz · funk</div>
+              <div><span style={{color:'var(--text-dim)'}}>Status</span><br/><span style={{color:'var(--acid)'}}>jamming weekly</span></div>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-title">Stats</div>
+            <div className="card-sub">your plays · everyone's RSVPs · all notes</div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10}}>
+              <Stat label="my plays" value={totalPlays}/>
+              <Stat label="total RSVPs" value={totalRsvps} shared={true}/>
+              <Stat label="notes" value={guestbook.length} shared={true}/>
+            </div>
+            <div style={{marginTop:10,display:'flex',alignItems:'center',gap:8}}>
+              <div className="online-badge"><span className="pulse"/><span>live data · shared across all visitors</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style={{marginTop:18,fontFamily:'var(--mono)',fontSize:11,color:'var(--text-dim)',letterSpacing:'0.08em'}}>
+        © Casinheiros · MMXXVI · Ovar · all jams self-recorded
+      </div>
+    </div>
+  );
+}
+
+function Stat({ label, value, shared }) {
+  return (
+    <div style={{padding:12,background:'rgba(125,215,240,0.08)',border:'1px solid rgba(125,215,240,0.2)',borderRadius:8,textAlign:'center'}}>
+      <div style={{fontFamily:'var(--pix-bold)',fontSize:36,color:'#fff',lineHeight:1,textShadow:'1px 1px 0 var(--bondi)'}}>{value}</div>
+      <div style={{fontFamily:'var(--mono)',fontSize:10,letterSpacing:'0.2em',color:'var(--text-dim)',textTransform:'uppercase',marginTop:4}}>{label}</div>
+      {shared && <div style={{marginTop:4,fontFamily:'var(--mono)',fontSize:9,color:'var(--acid)',opacity:0.7}}>shared</div>}
+    </div>
+  );
+}
+
+// ── Taskbar ───────────────────────────────────────────
+function Taskbar({ track, playing, level, onToggle }) {
+  const [time, setTime] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setTime(new Date()), 30000);
+    return () => clearInterval(id);
+  }, []);
+  const hh = String(time.getHours()).padStart(2,'0');
+  const mm = String(time.getMinutes()).padStart(2,'0');
+  const marqueeText = playing
+    ? `▶ ${track.title} — casinheiros — live synth — ${track.bpm} bpm — `
+    : `casinheiros — acid jazz from Ovar — press ▶ to begin — `;
+  const [scroll, setScroll] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setScroll(s => (s+1)%1000), 60);
+    return () => clearInterval(id);
+  }, []);
+  const bars = [];
+  for (let i=0; i<8; i++) {
+    const t=i/7;
+    const h = playing ? Math.max(2, Math.min(16, level*40*(1.2-Math.abs(t-0.5)))) : 2;
+    bars.push(<div key={i} className="b" style={{height:h}}/>);
+  }
+  return (
+    <div className="taskbar">
+      <button className="tb-start" onClick={onToggle}>✶ {playing?'pause':'play'}</button>
+      <div className="tb-mini-player">
+        <div className="tb-bars">{bars}</div>
+        <div className="marquee">
+          <span style={{transform:`translateX(${-scroll}px)`,display:'inline-block'}}>
+            {marqueeText.repeat(4)}
+          </span>
+        </div>
+      </div>
+      <div className="tb-tray">
+        <span style={{opacity:0.7}}>OVAR ·</span>
+        <span>{hh}:{mm}</span>
+      </div>
+    </div>
+  );
+}
+
+// ── First Run ─────────────────────────────────────────
+function FirstRun({ onDismiss, onListen }) {
+  return (
+    <div className="first-run" onClick={onDismiss}>
+      <div className="panel" onClick={e => e.stopPropagation()}>
+        <div className="panel-body">
+          <div className="eyebrow" style={{marginBottom:4}}>welcome.exe</div>
+          <h2>Olá.</h2>
+          <p>
+            You found the <strong>casinha</strong>. We're Casinheiros — a four-piece acid-jazz outfit jamming in an annex in Ovar, Portugal.
+          </p>
+          <p>
+            Audio is <strong>synthesised live in your browser</strong>. The <strong>guestbook and RSVPs are shared</strong> — what you write, everyone sees. Nothing leaves without your input.
+          </p>
+          <div style={{display:'flex',gap:10,marginTop:18}}>
+            <button className="gel-btn acid" onClick={onListen}>▶ start with track 01</button>
+            <button className="gel-btn ghost" onClick={onDismiss}>just look around</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
 </html>
