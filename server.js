@@ -39,7 +39,7 @@ app.use(cors())
 app.use(express.json())
 
 // Serve the built frontend in production
-const distPath = path.join(__dirname, '..', 'dist')
+const distPath = path.join(__dirname, 'dist')
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath))
 }
